@@ -1,0 +1,28 @@
+{
+  "name": "gulp4-starter",
+  "version": "1.0.0",
+  "description": "A basic gulp4 starter template for generate static web page with ejs and scss",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+ssh://git@github.com/masudafsar/gulp4-starter.git"
+  },
+  "keywords": [
+    "gulp4",
+    "web",
+    "scss",
+    "ejs"
+  ],
+  "author": "Masud Afsar",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/masudafsar/gulp4-starter/issues"
+  },
+  "homepage": "https://github.com/masudafsar/gulp4-starter#readme",
+  "devDependencies": {
+    "gulp": "^4.0.0"
+  }
+}
