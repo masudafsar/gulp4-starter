@@ -1,6 +1,50 @@
-function defaultTask(cb) {
-    console.log("Default Task processed!");
-    cb();
+'use strict';
+
+const {series, parallel, src, dest} = require('gulp');
+const ejs = require('gulp-ejs');
+const sass = require('gulp-sass');
+
+sass.compiler = require('node-sass');
+
+function clean() {
 }
 
-exports.default = defaultTask;
+function build_html() {
+    return src('./src/**/*.ejs')
+        .pipe(dest('./dist'))
+}
+
+function build_styles() {
+    return src('./src/scss/**/*.scss')
+        .pipe(sass({outputStyle: 'compressed'}).on('error', sass.logError))
+        .pipe(dest('./dist/css'));
+}
+
+function build_scripts() {
+}
+
+function build_statics() {
+    return src('./src/static/**/*', {dot: true}).pipe(dest('./dist/'));
+}
+
+exports.default = series(
+    clean,
+    parallel(
+        build_html,
+        build_styles,
+        build_scripts,
+        build_statics
+    )
+);
+exports.clean = clean;
+exports.build = parallel(
+    build_html,
+    build_styles,
+    build_scripts,
+    build_statics
+);
+exports.html = build_html;
+exports.style = build_styles;
+exports.script = build_scripts;
+exports.static = build_statics;
+
