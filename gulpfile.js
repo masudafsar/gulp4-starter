@@ -4,6 +4,7 @@ const {series, parallel, src, dest} = require('gulp');
 const clean = require('gulp-clean');
 const ejs = require('gulp-ejs');
 const sass = require('gulp-sass');
+const srcmap = require('gulp-sourcemaps');
 
 sass.compiler = require('node-sass');
 
@@ -18,12 +19,15 @@ function build_html() {
 }
 
 function build_styles() {
-    return src('./src/scss/**/*.scss')
-        .pipe(sass({outputStyle: 'compressed'}).on('error', sass.logError))
+    return src('./src/scss/*.scss')
+        .pipe(srcmap.init())
+        .pipe(sass({outputStyle: 'nested'}).on('error', sass.logError))
+        .pipe(srcmap.write('.'))
         .pipe(dest('./dist/css'));
 }
 
-function build_scripts() {
+function build_scripts(cb) {
+    cb();
 }
 
 function build_statics() {
