@@ -1,6 +1,6 @@
 'use strict';
 
-const {series, parallel, src, dest} = require('gulp');
+const {series, parallel, src, dest, watch} = require('gulp');
 const log = require('fancy-log');
 const clean = require('gulp-clean');
 const ejs = require('gulp-ejs');
@@ -19,6 +19,7 @@ function build_html() {
     return src('./src/page/*.ejs')
         .pipe(ejs({}, {}, {ext: '.htm'}).on('error', log))
         .pipe(dest('./dist'))
+        .pipe(connect.reload());
 }
 
 function build_styles() {
@@ -26,15 +27,20 @@ function build_styles() {
         .pipe(srcmap.init())
         .pipe(sass({outputStyle: 'nested'}).on('error', sass.logError))
         .pipe(srcmap.write('.'))
-        .pipe(dest('./dist/css'));
+        .pipe(dest('./dist/css'))
+        .pipe(connect.reload());
 }
 
 function build_scripts() {
-    return src('./src/scripts/**/*').pipe(dest('./dist/scripts/'));
+    return src('./src/scripts/**/*')
+        .pipe(dest('./dist/scripts/'))
+        .pipe(connect.reload());
 }
 
 function build_statics() {
-    return src('./src/static/**/*', {dot: true}).pipe(dest('./dist/'));
+    return src('./src/static/**/*', {dot: true})
+        .pipe(dest('./dist/'))
+        .pipe(connect.reload());
 }
 
 function run_server() {
@@ -45,6 +51,11 @@ function run_server() {
     })
 }
 
+watch('./src/page/*.ejs', build_html);
+watch('./src/scss/*.scss', build_styles);
+watch('./src/scripts/**/*', build_scripts);
+watch('./src/static/**/*', build_statics);
+
 const build = parallel(
     build_html,
     build_styles,
@@ -53,7 +64,7 @@ const build = parallel(
 );
 
 const server = series(
-    clean,
+    clean_builds,
     build,
     run_server
 );
