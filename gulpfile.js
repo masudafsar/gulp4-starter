@@ -1,12 +1,15 @@
 'use strict';
 
 const {series, parallel, src, dest} = require('gulp');
+const clean = require('gulp-clean');
 const ejs = require('gulp-ejs');
 const sass = require('gulp-sass');
 
 sass.compiler = require('node-sass');
 
-function clean() {
+function clean_builds() {
+    return src(['./dist/*', './.publish/*'], {read: false, dot: true})
+        .pipe(clean({force: true}));
 }
 
 function build_html() {
@@ -36,7 +39,7 @@ exports.default = series(
         build_statics
     )
 );
-exports.clean = clean;
+exports.clean = clean_builds;
 exports.build = parallel(
     build_html,
     build_styles,
