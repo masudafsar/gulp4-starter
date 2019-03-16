@@ -14,7 +14,8 @@ function clean_builds() {
 }
 
 function build_html() {
-    return src('./src/**/*.ejs')
+    return src('./src/page/*.ejs')
+        .pipe(ejs({}, {}, {ext: '.html'}))
         .pipe(dest('./dist'))
 }
 
