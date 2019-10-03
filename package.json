@@ -28,6 +28,7 @@
     "gulp-clean": "^0.4.0",
     "gulp-connect": "^5.7.0",
     "gulp-ejs": "^3.3.0",
+    "gulp-gh-pages": "^0.5.4",
     "gulp-sass": "^4.0.2",
     "gulp-sourcemaps": "^2.6.5",
     "node-sass": "^4.11.0"

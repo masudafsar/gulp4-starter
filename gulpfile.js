@@ -7,6 +7,7 @@ const ejs = require('gulp-ejs');
 const sass = require('gulp-sass');
 const srcmap = require('gulp-sourcemaps');
 const connect = require('gulp-connect');
+const deploy = require('gulp-gh-pages');
 
 sass.compiler = require('node-sass');
 
@@ -43,12 +44,22 @@ function build_statics() {
         .pipe(connect.reload());
 }
 
-function run_server() {
-    return connect.server({
+function run_server(cb) {
+    connect.server({
         port: 8081,
         root: './dist/',
         livereload: true,
-    })
+    });
+    cb();
+}
+
+function deploy_gh_pages() {
+    return src('./dist/**/*', {dot: true})
+        .pipe(deploy({
+            origin: 'origin',
+            branch: 'gh-pages',
+            cacheDir: '.deploy',
+        }));
 }
 
 watch('./src/page/*.ejs', build_html);
@@ -77,3 +88,4 @@ exports.script = build_scripts;
 exports.static = build_statics;
 exports.build = build;
 exports.server = server;
+exports.deploy = deploy_gh_pages;
